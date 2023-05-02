@@ -30,15 +30,6 @@ export function App() {
     }
   }
   const variants = Object.keys({ good, neutral, bad });
-  // countTotalFeedback = ()=>{
-  //   const { good, neutral, bad } = this.state;
-  //   return(good + bad + neutral)
-  // }
-
-  // countPositiveFeedbackPercentage = ()=>{
-  //   const { good, neutral, bad } = this.state;
-  //   return((good*100)/ (good + bad + neutral)).toFixed(0)
-  // }
 
   return(
       <>
