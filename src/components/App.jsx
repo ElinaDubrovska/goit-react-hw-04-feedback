@@ -1,37 +1,50 @@
-import { Component } from "react";
+import {  useState } from "react";
 import { FeedbackOptions } from "./FeedbackOptions/FeedbackOptions";
 import { Section } from "./Section/Section";
 import { Statistics } from "./Statistics";
 import { Notification } from "./Notification";
 
-export class App extends Component{
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0
-  }
-  buttonHandler = event => {
-    const { name } = event.target;
-    this.setState(prevState => {
-      return { [name]: prevState[name] + 1 };
-    });
-  }
-  countTotalFeedback = ()=>{
-    const { good, neutral, bad } = this.state;
-    return(good + bad + neutral)
-  }
+export function App() {
+  const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
 
-  countPositiveFeedbackPercentage = ()=>{
-    const { good, neutral, bad } = this.state;
-    return((good*100)/ (good + bad + neutral)).toFixed(0)
+
+ const buttonHandler = event => {
+    const { name } = event.target;
+    switch (name) {
+      case 'good':
+        setGood(good => good + 1);
+        break;
+
+      case 'neutral':
+        setNeutral(neutral => neutral + 1);
+        break;
+
+      case 'bad':
+        setBad(bad => bad + 1);
+        break;
+
+      default:
+        throw new Error('Not supported type');
+    }
   }
-  render(){
-    const { good, neutral, bad } = this.state;
-    return(
+  const variants = Object.keys({ good, neutral, bad });
+  // countTotalFeedback = ()=>{
+  //   const { good, neutral, bad } = this.state;
+  //   return(good + bad + neutral)
+  // }
+
+  // countPositiveFeedbackPercentage = ()=>{
+  //   const { good, neutral, bad } = this.state;
+  //   return((good*100)/ (good + bad + neutral)).toFixed(0)
+  // }
+
+  return(
       <>
     <Section title = "Please leave feedback">
-      <FeedbackOptions variants={Object.keys(this.state)}
-      onClick = {this.buttonHandler}>
+      <FeedbackOptions variants={variants}
+      onClick = {buttonHandler}>
         
       </FeedbackOptions>
     </Section>
@@ -41,12 +54,11 @@ export class App extends Component{
             good={good}
             neutral={neutral}
             bad={bad}
-            total={this.countTotalFeedback()}
-            positivePercentage = {this.countPositiveFeedbackPercentage()}
+            total={good + bad + neutral}
+            positivePercentage = {((good*100)/ (good + bad + neutral)).toFixed(2) }
           /> : <Notification message="There is no feedback"/>
          }
        </Section>
       </>
     )
   }
-}
